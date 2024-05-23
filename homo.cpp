@@ -207,7 +207,7 @@ int main() {
     // random number generation, slightly more sophisticated than using std::rand
     // based on example here https://stackoverflow.com/questions/288739/generate-random-numbers-uniformly-over-an-entire-range
     std::random_device rand_dev; // obtain unsigned int seed from a random device (e.g., time(0)) by calling rand_dev()
-    unsigned int seed = rand_dev(); //1797740251 // currently busted with seed 961071223 // try 1386656568 //works with 1124697860; // for debugging, can set this to a constant value if desired, e.g., 1086615307; 
+    unsigned int seed = 3582795442; // rand_dev(); //1797740251 // currently busted with seed 961071223 // try 1386656568 //works with 1124697860; // for debugging, can set this to a constant value if desired, e.g., 1086615307; 
     std::mt19937 generator(seed); // generator(rand_dev()); 
     //std::cout << seed << std::endl; // write this out to the standard output...
     const double range_from = 0; // min value in range (inclusive)
@@ -307,9 +307,10 @@ int main() {
     cSS.numMoietiesByLength = numMoietiesByLength;
     std::ofstream coverages;
     coverages.open("./Output/" + strdate + runID + "coverages.txt");
-    coverages << "time  X  * 5-*_step1   2-*_step1 4-*_step1 M-*_step1 M-1-*_step1   M-*-M_competitive   2-b-3_step3 " <<
-        "2-b-4-*_step3  2-a-3-*_step3   2-a-5-*_step3 2-b-3-*_step3 2-b-4-*_step3 4-b-4-*_step3 4-a-3-*_step3 4-b-1-*_step3 4-b-1-*_step3" <<
-        "2-b-3-*_step4    2-b-4-*_step4  2-a-3-*_step4   2-a-5-*_step4  2-b-3-*_step4 2-b-4-*_step4 4-b-4-*_step4 4-a-3-*_step4 4-b-1-*_step4 4-b-1-*_step4 \n";
+    coverages << "time  X    3R1*	2R2*	3R3*	M*	1R*	2R*	3R*	4R*	5R*	6R*	7R*	8R*	9R*	10R*	1I*	2I*	3I*	4I*	5I*	6I*	7I*	8I*	9I*	10I*	1P*	2P*	3P*	4P*	5P*	6P*	7P*	8P*	9P*	10P* \n";
+    // coverages << "time  X  * 5-*_step1   2-*_step1 4-*_step1 M-*_step1 M-1-*_step1   M-*-M_competitive   2-b-3_step3 " <<
+    //     "2-b-4-*_step3  2-a-3-*_step3   2-a-5-*_step3 2-b-3-*_step3 2-b-4-*_step3 4-b-4-*_step3 4-a-3-*_step3 4-b-1-*_step3 4-b-1-*_step3" <<
+    //     "2-b-3-*_step4    2-b-4-*_step4  2-a-3-*_step4   2-a-5-*_step4  2-b-3-*_step4 2-b-4-*_step4 4-b-4-*_step4 4-a-3-*_step4 4-b-1-*_step4 4-b-1-*_step4 \n";
     std::map<std::string,bool> didIprint;
     // kMC loop!
     while (totalRate>0 && simTime<60*60*24*2) {
@@ -331,9 +332,7 @@ int main() {
         
 
         cSS.executionNumber++;
-        // if (cSS.executionNumber>4380) {
-        //     std::cout << "execution number: " << cSS.executionNumber << " sim time: " <<  simTime << " conversion: " << over_x << " Mn  "  <<  cSS.mwv.Mn << "  Mw  " << cSS.mwv.Mw << " chainPool size: "  <<  cSS.chainPool.size() << "\n";
-        // }
+
         if (cSS.executionNumber%200==0) {
             std::cout << "execution number: " << cSS.executionNumber << " sim time: " <<  simTime << " conversion: " << over_x << " Mn  "  <<  cSS.mwv.Mn << "  Mw  " << cSS.mwv.Mw << " chainPool size: "  <<  cSS.chainPool.size() << "\n";
             //std::cout << "count of Em6-ep*-Em6: " << cSS.links["Em6-ep*-Em6"] << "  count of Emp2-ep*-Em2  " << cSS.links["Emp2-ep*-Em2"] << " count of Emp9-[eplinkNotFormed]*-cE9  " << cSS.links["Emp9-[eplinkNotFormed]*-cE9"] << "  count of Emp9-ep*-cE9 "<< cSS.links["Emp9-ep*-cE9"] << "\n";
@@ -367,10 +366,18 @@ int main() {
         //         cSS.numMoietiesByLength[chainSize][it->first]+=it->second; //cSS.chainPool[i].funs[it->first]
         //     }
         // }
-        std::vector<std::map<std::string,long>> regCumSum = {cSS.maxChainSize+1,std::map<std::string,long>()};
+        //std::vector<std::map<std::string,long>> regCumSum = {cSS.maxChainSize+1,std::map<std::string,long>()};
+        // create a vector of maps of type std::vector<std::map<std::string,long>> regCumSum with the length of the vector being cSS.maxChainSize+1
+        std::vector<std::map<std::string,long>> regCumSum(cSS.maxChainSize+1,std::map<std::string,long>());
+
         // initialize normalizedCumSum with empty maps of the length of the simulation size (?does this actually need to happen)
         int myCount =0;
-        std::vector<std::map<std::string,double>> normalizedCumSum = {cSS.maxChainSize+1,std::map<std::string,double>()};
+
+        //std::vector<std::map<std::string,double>> normalizedCumSum = {cSS.maxChainSize+1,std::map<std::string,double>()};
+
+        // create a vector of maps of type std::vector<std::map<std::string,double>> normalizedCumSu with the length of the vector being cSS.maxChainSize+1
+        std::vector<std::map<std::string,double>> normalizedCumSum(cSS.maxChainSize+1,std::map<std::string,double>());
+
         for (long i=1; i<cSS.maxChainSize+1;++i) {
             // sum up everything less than i multiplied by the corresponding diffusion factor
             for (long j=1; j<=(i-1); ++j) {
@@ -423,25 +430,36 @@ int main() {
         +capK["R2"]["Kstep1"]*cSS.numMoieties["Emp"]*1.0/(V*Na)
         +capK["R3"]["Kstep1"]*cSS.numMoieties["Em"]*1.0/(V*Na)
         +capK["R9"]["Kstep1"]*cSS.numMoieties["cEp"]*1.0/(V*Na)
-        +capK["R10"]["Kstep1"]*cSS.numMoieties["cE"]*cSS.numMoieties["cEp"]*1.0/(V*Na)*1.0/(V*Na);
+        +capK["R1"]["Kstep1"]*capK["R1"]["Kstep2"]*cSS.numMoieties["cEp"]*cSS.numMoieties["Ep"]*1.0/(V*Na)*1.0/(V*Na)
+        +capK["R2"]["Kstep1"]*capK["R2"]["Kstep2"]*cSS.numMoieties["cEp"]*cSS.numMoieties["Emp"]*1.0/(V*Na)*1.0/(V*Na)
+        +capK["R3"]["Kstep1"]*capK["R3"]["Kstep2"]*cSS.numMoieties["cEp"]*cSS.numMoieties["Em"]*1.0/(V*Na)*1.0/(V*Na)
+        +capK["R9"]["Kstep1"]*capK["R9"]["Kstep2"]*cSS.numMoieties["cEp"]*cSS.numMoieties["cEp"]*1.0/(V*Na)*1.0/(V*Na)
+        +capK["R10"]["Kstep1"]*capK["R10"]["Kstep2"]*cSS.numMoieties["cE"]*cSS.numMoieties["cEp"]*1.0/(V*Na)*1.0/(V*Na);
 
-        double otherBindingSites = capK["R9"]["Kbind"]*capK["R9"]["Kstep1"]*cSS.numMoieties["cEp"]*cSS.numMoieties["cEp"]*1.0/(V*Na)*1.0/(V*Na);
+        double otherBindingSites = capK["R9"]["Kbind"]*cSS.numMoieties["cEp"]*cSS.numMoieties["cEp"]*1.0/(V*Na)*1.0/(V*Na);
 
-        double reverseBindingSites = capK["R1"]["Kprimestep3"]*capK["R1"]["Kprimestep4"]*cSS.links[P1]*1.0/(V*Na)
-        +capK["R2"]["Kprimestep3"]*capK["R2"]["Kprimestep4"]*cSS.links[P2]*1.0/(V*Na)
-        +capK["R3"]["Kprimestep3"]*capK["R3"]["Kprimestep4"]*cSS.links[P3]*1.0/(V*Na)
-        +capK["R4"]["Kprimestep3"]*capK["R4"]["Kprimestep4"]*cSS.links[P4]*1.0/(V*Na)
-        +capK["R5"]["Kprimestep3"]*capK["R5"]["Kprimestep4"]*cSS.links[P5]*1.0/(V*Na)
-        +capK["R6"]["Kprimestep3"]*capK["R6"]["Kprimestep4"]*cSS.links[P6]*1.0/(V*Na)
-        +capK["R7"]["Kprimestep3"]*capK["R7"]["Kprimestep4"]*cSS.links[P7]*1.0/(V*Na)
-        +capK["R8"]["Kprimestep3"]*capK["R8"]["Kprimestep4"]*cSS.links[P8]*1.0/(V*Na)
-        +capK["R9"]["Kprimestep3"]*capK["R9"]["Kprimestep4"]*cSS.links[P9]*1.0/(V*Na)
-        +capK["R10"]["Kprimestep3"]*capK["R10"]["Kprimestep4"]*cSS.links[P10]*1.0/(V*Na)
-        +capK["R5"]["Kprimestep4"]*cSS.links[P5]*1.0/(V*Na)
-        +capK["R6"]["Kprimestep4"]*cSS.links[P6]*1.0/(V*Na)
-        +capK["R7"]["Kprimestep4"]*cSS.links[P7]*1.0/(V*Na)
-        +capK["R8"]["Kprimestep4"]*cSS.links[P8]*1.0/(V*Na)
-        +capK["R10"]["Kprimestep4"]*cSS.links[P10]*1.0/(V*Na);
+        double reverseBindingSites = capK["R1"]["Kprimestep5"]*capK["R1"]["Kprimestep6"]*cSS.links[P1]*1.0/(V*Na)
+        +capK["R2"]["Kprimestep5"]*capK["R2"]["Kprimestep6"]*cSS.links[P2]*1.0/(V*Na)
+        +capK["R3"]["Kprimestep5"]*capK["R3"]["Kprimestep6"]*cSS.links[P3]*1.0/(V*Na)
+        +capK["R4"]["Kprimestep5"]*capK["R4"]["Kprimestep6"]*cSS.links[P4]*1.0/(V*Na)
+        +capK["R5"]["Kprimestep5"]*capK["R5"]["Kprimestep6"]*cSS.links[P5]*1.0/(V*Na)
+        +capK["R6"]["Kprimestep5"]*capK["R6"]["Kprimestep6"]*cSS.links[P6]*1.0/(V*Na)
+        +capK["R7"]["Kprimestep5"]*capK["R7"]["Kprimestep6"]*cSS.links[P7]*1.0/(V*Na)
+        +capK["R8"]["Kprimestep5"]*capK["R8"]["Kprimestep6"]*cSS.links[P8]*1.0/(V*Na)
+        +capK["R9"]["Kprimestep5"]*capK["R9"]["Kprimestep6"]*cSS.links[P9]*1.0/(V*Na)
+        +capK["R10"]["Kprimestep5"]*capK["R10"]["Kprimestep6"]*cSS.links[P10]*1.0/(V*Na)
+        +capK["R1"]["Kprimestep4"]*capK["R1"]["Kprimestep5"]*capK["R1"]["Kprimestep6"]*cSS.links[P1]*1.0/(V*Na)
+        +capK["R2"]["Kprimestep4"]*capK["R2"]["Kprimestep5"]*capK["R2"]["Kprimestep6"]*cSS.links[P2]*1.0/(V*Na)
+        +capK["R3"]["Kprimestep4"]*capK["R3"]["Kprimestep5"]*capK["R3"]["Kprimestep6"]*cSS.links[P3]*1.0/(V*Na)
+        +capK["R4"]["Kprimestep4"]*capK["R4"]["Kprimestep5"]*capK["R4"]["Kprimestep6"]*cSS.links[P4]*1.0/(V*Na)
+        +capK["R5"]["Kprimestep4"]*capK["R5"]["Kprimestep5"]*capK["R5"]["Kprimestep6"]*cSS.links[P5]*1.0/(V*Na)
+        +capK["R6"]["Kprimestep4"]*capK["R6"]["Kprimestep5"]*capK["R6"]["Kprimestep6"]*cSS.links[P6]*1.0/(V*Na)
+        +capK["R7"]["Kprimestep4"]*capK["R7"]["Kprimestep5"]*capK["R7"]["Kprimestep6"]*cSS.links[P7]*1.0/(V*Na)
+        +capK["R8"]["Kprimestep4"]*capK["R8"]["Kprimestep5"]*capK["R8"]["Kprimestep6"]*cSS.links[P8]*1.0/(V*Na)
+        +capK["R9"]["Kprimestep4"]*capK["R9"]["Kprimestep5"]*capK["R9"]["Kprimestep6"]*cSS.links[P9]*1.0/(V*Na)
+        +capK["R10"]["Kprimestep4"]*capK["R10"]["Kprimestep5"]*capK["R10"]["Kprimestep6"]*cSS.links[P10]*1.0/(V*Na);
+
+
 
         double star = Ct / (1.0 + forwardBindingSites + otherBindingSites + reverseBindingSites); 
 	double denom = (1.0 + forwardBindingSites + otherBindingSites + reverseBindingSites);
@@ -467,9 +485,9 @@ int main() {
                 if (R_i == "R1" || R_i == "R2" || R_i == "R3" || R_i == "R4" || R_i == "R9" || R_i == "R10") {
                     double kf=rateConstants[R_i]["kf"];
                     double kr=rateConstants[R_i]["kr"];
-                    double kfprime = capK[R_i]["Kstep1"]*kf;
+                    double kfprime = capK[R_i]["Kstep1"]*capK[R_i]["Kstep2"]*kf;
                     double cfprime = kfprime/(V*Na); // kf is trimolecular for these linking reactions: catalyst+2 reactants
-                    double krprime = kr * capK[R_i]["Kprimestep3"]*capK[R_i]["Kprimestep4"];
+                    double krprime = kr * capK[R_i]["Kprimestep4"]*capK[R_i]["Kprimestep5"]*capK[R_i]["Kprimestep6"];
                     double crprime = krprime; // kr is bimolecular (catalyst + link)
                     if (cSS.chainPool.size()==1 && cSS.numMonomers["cEp"]==0) {
                         // no linking reactions possible... all linking reactions should be carried out as looping reactions
@@ -520,7 +538,7 @@ int main() {
 		    // if (debugging) {
 		    double kf=rateConstants[R_i]["kf"];
                     // double kr=rateConstants[R_i]["kr"];
-                    double kfprime = capK[R_i]["Kstep1"]*kf;
+                    double kfprime = capK[R_i]["Kstep1"]*capK[R_i]["Kstep2"]*kf;
                     double cfprime = kfprime/(V*Na); // kf is trimolecular for these linking reactions: catalyst+2 reactants
                     // double krprime = kr * capK[R_i]["Kprimestep3"]*capK[R_i]["Kprimestep4"];
                     //double crprime = krprime; // kr is bimolecular (catalyst + link)
@@ -633,14 +651,8 @@ int main() {
                 double kr=rateConstants[R_i]["kr"];
                 double kfprime = capK[R_i]["Kstep1"]*kf;
                 double cfprime = kfprime/(V*Na); // kf is trimolecular for these linking reactions: catalyst+2 reactants
-                double krprime = kr * capK[R_i]["Kprimestep3"]*capK[R_i]["Kprimestep4"];
+                double krprime = kr * capK[R_i]["Kprimestep4"]*capK[R_i]["Kprimestep5"]*capK[R_i]["Kprimestep6"];
                 double crprime = krprime; // kr is bimolecular (catalyst + link)
-                if (cSS.chainPool.size()==1 && cSS.numMonomers["cEp"]==0) {
-                    // no linking reactions possible... all linking reactions should be carried out as looping reactions
-                    rate[i]=0;
-                    allOneChain=true;
-                    continue;
-                }
                 // calculate c parameter -- linking reaction should always involve 2 reactants and a catalyst molecule
                 if (reactionList[i].reactants.size()==2) {
                     std::string moiety1=reactionList[i].reactants[0];
@@ -818,35 +830,103 @@ int main() {
         statusFile << "mol weight done, start writing to files if correct execution " << cSS.executionNumber << std::endl; 
         statusFile << std::flush;
         over_x=1-((1.0*cSS.numMoieties["cEp"])/(1.0*myConditions.numMoieties0["cEp"])); // monomer conversion
+        // if (cSS.executionNumber%200==0) {
+        //     coverages << simTime << "   " << over_x << "   "<< 1/denom << "   "
+        //     << capK["R1"]["Kstep1"]*cSS.numMoieties["Ep"]*1.0/(V*Na)/denom << "   "
+        //     << capK["R2"]["Kstep1"]*cSS.numMoieties["Emp"]*1.0/(V*Na)/denom << "    "
+        //     << capK["R3"]["Kstep1"]*cSS.numMoieties["Em"]*1.0/(V*Na)/denom << " "
+        //     << capK["R9"]["Kstep1"]*cSS.numMoieties["cEp"]*1.0/(V*Na)/denom << "   "
+        //     << capK["R10"]["Kstep1"]*cSS.numMoieties["cE"]*cSS.numMoieties["cEp"]*1.0/(V*Na)*1.0/(V*Na)/denom << "  "
+        //     << capK["R9"]["Kbind"]*capK["R9"]["Kstep1"]*cSS.numMoieties["cEp"]*cSS.numMoieties["cEp"]*1.0/(V*Na)*1.0/(V*Na)/denom << "    "
+        //     << capK["R1"]["Kprimestep3"]*capK["R1"]["Kprimestep4"]*cSS.links[P1]*1.0/(V*Na)/denom << "  "
+        //     << capK["R2"]["Kprimestep3"]*capK["R2"]["Kprimestep4"]*cSS.links[P2]*1.0/(V*Na)/denom << "  "
+        //     << capK["R3"]["Kprimestep3"]*capK["R3"]["Kprimestep4"]*cSS.links[P3]*1.0/(V*Na)/denom << "  "
+        //     << capK["R4"]["Kprimestep3"]*capK["R4"]["Kprimestep4"]*cSS.links[P4]*1.0/(V*Na)/denom << "  "
+        //     << capK["R5"]["Kprimestep3"]*capK["R5"]["Kprimestep4"]*cSS.links[P5]*1.0/(V*Na)/denom << "  "
+        //     << capK["R6"]["Kprimestep3"]*capK["R6"]["Kprimestep4"]*cSS.links[P6]*1.0/(V*Na)/denom << "  "
+        //     << capK["R7"]["Kprimestep3"]*capK["R7"]["Kprimestep4"]*cSS.links[P7]*1.0/(V*Na)/denom << "  "
+        //     << capK["R8"]["Kprimestep3"]*capK["R8"]["Kprimestep4"]*cSS.links[P8]*1.0/(V*Na)/denom << "  "
+        //     << capK["R9"]["Kprimestep3"]*capK["R9"]["Kprimestep4"]*cSS.links[P9]*1.0/(V*Na)/denom << "  "
+        //     << capK["R10"]["Kprimestep3"]*capK["R10"]["Kprimestep4"]*cSS.links[P10]*1.0/(V*Na)/denom << "  "
+        //     << capK["R1"]["Kprimestep4"]*cSS.links[P1]*1.0/(V*Na)/denom << "  "
+        //     << capK["R2"]["Kprimestep4"]*cSS.links[P2]*1.0/(V*Na)/denom << "  "
+        //     << capK["R3"]["Kprimestep4"]*cSS.links[P3]*1.0/(V*Na)/denom << "  "
+        //     << capK["R4"]["Kprimestep4"]*cSS.links[P4]*1.0/(V*Na)/denom << "  "
+        //     << capK["R5"]["Kprimestep4"]*cSS.links[P5]*1.0/(V*Na)/denom << "  "
+        //     << capK["R6"]["Kprimestep4"]*cSS.links[P6]*1.0/(V*Na)/denom << "  "
+        //     << capK["R7"]["Kprimestep4"]*cSS.links[P7]*1.0/(V*Na)/denom << "  "
+        //     << capK["R8"]["Kprimestep4"]*cSS.links[P8]*1.0/(V*Na)/denom << "  "
+        //     << capK["R9"]["Kprimestep4"]*cSS.links[P9]*1.0/(V*Na)/denom << "  "
+        //     << capK["R10"]["Kprimestep4"]*cSS.links[P10]*1.0/(V*Na)/denom << "  \n";
+        // }
+
+        // if (cSS.executionNumber%200==0) {
+        //     coverages << simTime << "   " << over_x << "   "<< 1/denom << "   "
+        //     << capK["R1"]["Kstep1"]*cSS.numMoieties["Ep"]*1.0/(V*Na)/denom << "   "
+        //     << capK["R2"]["Kstep1"]*cSS.numMoieties["Emp"]*1.0/(V*Na)/denom << "    "
+        //     << capK["R3"]["Kstep1"]*cSS.numMoieties["Em"]*1.0/(V*Na)/denom << " "
+        //     << capK["R9"]["Kstep1"]*cSS.numMoieties["cEp"]*1.0/(V*Na)/denom << "   "
+        //     << capK["R10"]["Kstep1"]*cSS.numMoieties["cE"]*cSS.numMoieties["cEp"]*1.0/(V*Na)*1.0/(V*Na)/denom << "  "
+        //     << capK["R9"]["Kbind"]*capK["R9"]["Kstep1"]*cSS.numMoieties["cEp"]*cSS.numMoieties["cEp"]*1.0/(V*Na)*1.0/(V*Na)/denom << "    "
+        //     << capK["R1"]["Kprimestep3"]*capK["R1"]["Kprimestep4"]*cSS.links[P1]*1.0/(V*Na)/denom << "  "
+        //     << capK["R2"]["Kprimestep3"]*capK["R2"]["Kprimestep4"]*cSS.links[P2]*1.0/(V*Na)/denom << "  "
+        //     << capK["R3"]["Kprimestep3"]*capK["R3"]["Kprimestep4"]*cSS.links[P3]*1.0/(V*Na)/denom << "  "
+        //     << capK["R4"]["Kprimestep3"]*capK["R4"]["Kprimestep4"]*cSS.links[P4]*1.0/(V*Na)/denom << "  "
+        //     << capK["R5"]["Kprimestep3"]*capK["R5"]["Kprimestep4"]*cSS.links[P5]*1.0/(V*Na)/denom << "  "
+        //     << capK["R6"]["Kprimestep3"]*capK["R6"]["Kprimestep4"]*cSS.links[P6]*1.0/(V*Na)/denom << "  "
+        //     << capK["R7"]["Kprimestep3"]*capK["R7"]["Kprimestep4"]*cSS.links[P7]*1.0/(V*Na)/denom << "  "
+        //     << capK["R8"]["Kprimestep3"]*capK["R8"]["Kprimestep4"]*cSS.links[P8]*1.0/(V*Na)/denom << "  "
+        //     << capK["R9"]["Kprimestep3"]*capK["R9"]["Kprimestep4"]*cSS.links[P9]*1.0/(V*Na)/denom << "  "
+        //     << capK["R10"]["Kprimestep3"]*capK["R10"]["Kprimestep4"]*cSS.links[P10]*1.0/(V*Na)/denom << "  "
+        //     << capK["R1"]["Kprimestep4"]*cSS.links[P1]*1.0/(V*Na)/denom << "  "
+        //     << capK["R2"]["Kprimestep4"]*cSS.links[P2]*1.0/(V*Na)/denom << "  "
+        //     << capK["R3"]["Kprimestep4"]*cSS.links[P3]*1.0/(V*Na)/denom << "  "
+        //     << capK["R4"]["Kprimestep4"]*cSS.links[P4]*1.0/(V*Na)/denom << "  "
+        //     << capK["R5"]["Kprimestep4"]*cSS.links[P5]*1.0/(V*Na)/denom << "  "
+        //     << capK["R6"]["Kprimestep4"]*cSS.links[P6]*1.0/(V*Na)/denom << "  "
+        //     << capK["R7"]["Kprimestep4"]*cSS.links[P7]*1.0/(V*Na)/denom << "  "
+        //     << capK["R8"]["Kprimestep4"]*cSS.links[P8]*1.0/(V*Na)/denom << "  "
+        //     << capK["R9"]["Kprimestep4"]*cSS.links[P9]*1.0/(V*Na)/denom << "  "
+        //     << capK["R10"]["Kprimestep4"]*cSS.links[P10]*1.0/(V*Na)/denom << "  \n";
+        // }
+
+
         if (cSS.executionNumber%200==0) {
             coverages << simTime << "   " << over_x << "   "<< 1/denom << "   "
-            << capK["R1"]["Kstep1"]*cSS.numMoieties["Ep"]*1.0/(V*Na)/denom << "   "
-            << capK["R2"]["Kstep1"]*cSS.numMoieties["Emp"]*1.0/(V*Na)/denom << "    "
-            << capK["R3"]["Kstep1"]*cSS.numMoieties["Em"]*1.0/(V*Na)/denom << " "
-            << capK["R9"]["Kstep1"]*cSS.numMoieties["cEp"]*1.0/(V*Na)/denom << "   "
-            << capK["R10"]["Kstep1"]*cSS.numMoieties["cE"]*cSS.numMoieties["cEp"]*1.0/(V*Na)*1.0/(V*Na)/denom << "  "
-            << capK["R9"]["Kbind"]*capK["R9"]["Kstep1"]*cSS.numMoieties["cEp"]*cSS.numMoieties["cEp"]*1.0/(V*Na)*1.0/(V*Na)/denom << "    "
-            << capK["R1"]["Kprimestep3"]*capK["R1"]["Kprimestep4"]*cSS.links[P1]*1.0/(V*Na)/denom << "  "
-            << capK["R2"]["Kprimestep3"]*capK["R2"]["Kprimestep4"]*cSS.links[P2]*1.0/(V*Na)/denom << "  "
-            << capK["R3"]["Kprimestep3"]*capK["R3"]["Kprimestep4"]*cSS.links[P3]*1.0/(V*Na)/denom << "  "
-            << capK["R4"]["Kprimestep3"]*capK["R4"]["Kprimestep4"]*cSS.links[P4]*1.0/(V*Na)/denom << "  "
-            << capK["R5"]["Kprimestep3"]*capK["R5"]["Kprimestep4"]*cSS.links[P5]*1.0/(V*Na)/denom << "  "
-            << capK["R6"]["Kprimestep3"]*capK["R6"]["Kprimestep4"]*cSS.links[P6]*1.0/(V*Na)/denom << "  "
-            << capK["R7"]["Kprimestep3"]*capK["R7"]["Kprimestep4"]*cSS.links[P7]*1.0/(V*Na)/denom << "  "
-            << capK["R8"]["Kprimestep3"]*capK["R8"]["Kprimestep4"]*cSS.links[P8]*1.0/(V*Na)/denom << "  "
-            << capK["R9"]["Kprimestep3"]*capK["R9"]["Kprimestep4"]*cSS.links[P9]*1.0/(V*Na)/denom << "  "
-            << capK["R10"]["Kprimestep3"]*capK["R10"]["Kprimestep4"]*cSS.links[P10]*1.0/(V*Na)/denom << "  "
-            << capK["R1"]["Kprimestep4"]*cSS.links[P1]*1.0/(V*Na)/denom << "  "
-            << capK["R2"]["Kprimestep4"]*cSS.links[P2]*1.0/(V*Na)/denom << "  "
-            << capK["R3"]["Kprimestep4"]*cSS.links[P3]*1.0/(V*Na)/denom << "  "
-            << capK["R4"]["Kprimestep4"]*cSS.links[P4]*1.0/(V*Na)/denom << "  "
-            << capK["R5"]["Kprimestep4"]*cSS.links[P5]*1.0/(V*Na)/denom << "  "
-            << capK["R6"]["Kprimestep4"]*cSS.links[P6]*1.0/(V*Na)/denom << "  "
-            << capK["R7"]["Kprimestep4"]*cSS.links[P7]*1.0/(V*Na)/denom << "  "
-            << capK["R8"]["Kprimestep4"]*cSS.links[P8]*1.0/(V*Na)/denom << "  "
-            << capK["R9"]["Kprimestep4"]*cSS.links[P9]*1.0/(V*Na)/denom << "  "
-            << capK["R10"]["Kprimestep4"]*cSS.links[P10]*1.0/(V*Na)/denom << "  \n";
+            << capK["R1"]["Kstep1"]*cSS.numMoieties["Ep"]*1.0/(V*Na)/denom << "  "
+            << capK["R2"]["Kstep1"]*cSS.numMoieties["Emp"]*1.0/(V*Na)/denom << "  "
+            << capK["R3"]["Kstep1"]*cSS.numMoieties["Em"]*1.0/(V*Na)/denom << "  "
+            << capK["R9"]["Kstep1"]*cSS.numMoieties["cEp"]*1.0/(V*Na)/denom << "  "
+            << capK["R1"]["Kstep1"]*capK["R1"]["Kstep2"]*cSS.numMoieties["cEp"]*cSS.numMoieties["Ep"]*1.0/(V*Na)*1.0/(V*Na)/denom << "  "
+            << capK["R2"]["Kstep1"]*capK["R2"]["Kstep2"]*cSS.numMoieties["cEp"]*cSS.numMoieties["Emp"]*1.0/(V*Na)*1.0/(V*Na)/denom << "  "
+            << capK["R3"]["Kstep1"]*capK["R3"]["Kstep2"]*cSS.numMoieties["cEp"]*cSS.numMoieties["Em"]*1.0/(V*Na)*1.0/(V*Na)/denom << "  "
+            << capK["R9"]["Kstep1"]*capK["R9"]["Kstep2"]*cSS.numMoieties["cEp"]*cSS.numMoieties["cEp"]*1.0/(V*Na)*1.0/(V*Na)/denom << "  "
+            << capK["R10"]["Kstep1"]*capK["R10"]["Kstep2"]*cSS.numMoieties["cE"]*cSS.numMoieties["cEp"]*1.0/(V*Na)*1.0/(V*Na)/denom << "  "
+
+            << capK["R9"]["Kbind"]*cSS.numMoieties["cEp"]*cSS.numMoieties["cEp"]*1.0/(V*Na)*1.0/(V*Na)/denom << "  "
+
+            << capK["R1"]["Kprimestep5"]*capK["R1"]["Kprimestep6"]*cSS.links[P1]*1.0/(V*Na)/denom << "  "
+            << capK["R2"]["Kprimestep5"]*capK["R2"]["Kprimestep6"]*cSS.links[P2]*1.0/(V*Na)/denom << "  "
+            << capK["R3"]["Kprimestep5"]*capK["R3"]["Kprimestep6"]*cSS.links[P3]*1.0/(V*Na)/denom << "  "
+            << capK["R4"]["Kprimestep5"]*capK["R4"]["Kprimestep6"]*cSS.links[P4]*1.0/(V*Na)/denom << "  "
+            << capK["R5"]["Kprimestep5"]*capK["R5"]["Kprimestep6"]*cSS.links[P5]*1.0/(V*Na)/denom << "  "
+            << capK["R6"]["Kprimestep5"]*capK["R6"]["Kprimestep6"]*cSS.links[P6]*1.0/(V*Na)/denom << "  "
+            << capK["R7"]["Kprimestep5"]*capK["R7"]["Kprimestep6"]*cSS.links[P7]*1.0/(V*Na)/denom << "  "
+            << capK["R8"]["Kprimestep5"]*capK["R8"]["Kprimestep6"]*cSS.links[P8]*1.0/(V*Na)/denom << "  "
+            << capK["R9"]["Kprimestep5"]*capK["R9"]["Kprimestep6"]*cSS.links[P9]*1.0/(V*Na)/denom << "  "
+            << capK["R10"]["Kprimestep5"]*capK["R10"]["Kprimestep6"]*cSS.links[P10]*1.0/(V*Na)/denom << "  "
+            << capK["R1"]["Kprimestep4"]*capK["R1"]["Kprimestep5"]*capK["R1"]["Kprimestep6"]*cSS.links[P1]*1.0/(V*Na)/denom << "  "
+            << capK["R2"]["Kprimestep4"]*capK["R2"]["Kprimestep5"]*capK["R2"]["Kprimestep6"]*cSS.links[P2]*1.0/(V*Na)/denom << "  "
+            << capK["R3"]["Kprimestep4"]*capK["R3"]["Kprimestep5"]*capK["R3"]["Kprimestep6"]*cSS.links[P3]*1.0/(V*Na)/denom << "  "
+            << capK["R4"]["Kprimestep4"]*capK["R4"]["Kprimestep5"]*capK["R4"]["Kprimestep6"]*cSS.links[P4]*1.0/(V*Na)/denom << "  "
+            << capK["R5"]["Kprimestep4"]*capK["R5"]["Kprimestep5"]*capK["R5"]["Kprimestep6"]*cSS.links[P5]*1.0/(V*Na)/denom << "  "
+            << capK["R6"]["Kprimestep4"]*capK["R6"]["Kprimestep5"]*capK["R6"]["Kprimestep6"]*cSS.links[P6]*1.0/(V*Na)/denom << "  "
+            << capK["R7"]["Kprimestep4"]*capK["R7"]["Kprimestep5"]*capK["R7"]["Kprimestep6"]*cSS.links[P7]*1.0/(V*Na)/denom << "  "
+            << capK["R8"]["Kprimestep4"]*capK["R8"]["Kprimestep5"]*capK["R8"]["Kprimestep6"]*cSS.links[P8]*1.0/(V*Na)/denom << "  "
+            << capK["R9"]["Kprimestep4"]*capK["R9"]["Kprimestep5"]*capK["R9"]["Kprimestep6"]*cSS.links[P9]*1.0/(V*Na)/denom << "  "
+            << capK["R10"]["Kprimestep4"]*capK["R10"]["Kprimestep5"]*capK["R10"]["Kprimestep6"]*cSS.links[P10]*1.0/(V*Na)/denom << "  \n";
         }
+
         if ((cSS.executionNumber%200==0) && myOptions.Changxia) {
             recordChangxiaConcentrations(cSS.numMoieties,myConditions.numMoieties0,over_x,simTime,ChangxiaOutput,V, Na,cSS.mwv.Mn,cSS.mwv.Mw);
             printAllLinksToFile(cSS.links,linksFile,allPossibleLinks,simTime,V,Na);

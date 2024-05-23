@@ -14,9 +14,10 @@ std::map<std::string,signed long> &numMoieties0, std::map<std::string,signed lon
 std::map<std::string,Monomer> &monomers,std::ofstream &TirrellOutput, double simTime, double Mn, 
 double Mw );
 
-void printwfs(std::vector<Chain> chainPool,std::string strdate, std::string filename, 
-std::vector<double> monomerWeights,std::map<std::string,signed long> numMonomers,
-signed long simulationSize);
+//void printwfs(std::vector<Chain> chainPool,std::string strdate, std::string filename, 
+////std::vector<double> monomerWeights,std::map<std::string,signed long> numMonomers,
+//signed long simulationSize);
+void printwfs(std::vector<Chain> chainPool,std::string strdate, std::string filename, std::vector<double> monomerWeights,std::map<std::string,signed long> numMonomers,signed long simulationSize);
 
 void printEndGrps(const SystemVariables &cSS,std::ofstream &eGOutput, double simTime);
 void printExecutions(std::vector<long> reactionsExecutedTally,std::vector<Reaction> reactionList,std::string strdate,std::string runID);

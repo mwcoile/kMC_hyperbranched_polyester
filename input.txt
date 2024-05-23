@@ -2,7 +2,7 @@ Enter system temperature (K),323
 Enter monomer names in a comma separated list,cEp
 Enter concentrations of monomers above in M,2.5
 Enter molecular weights of monomers above in g/mol,142
-Enter simulation size in terms of desired number of monomers to simulate,50000
+Enter simulation size in terms of desired number of monomers to simulate,500
 Enter the functional groups and the monomers on which they are present. If the same functional group is on more than one monomer add another line
 cEp, cEp, 1
 Enter reactions present that the functional groups may undergo
