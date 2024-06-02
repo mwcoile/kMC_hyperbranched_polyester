@@ -174,7 +174,7 @@ struct chosenReactionChannel {
     std::string reactionType="";
 };
 
-void updateSystemState(SystemVariables &cSS, Reaction rxn,double r3,double r4,ModelOptions myOptions, std::map<std::string,DoubleSec>& timers ,chosenReactionChannel chosenRxn,std::vector<Reaction> reactionList,int length, double ratesByLength_lengthRi,std::vector<double> transport_factor,std::vector<double> ksteptimesstar,std::ofstream& statusFile);
+void updateSystemState(SystemVariables &cSS, Reaction rxn,double r3,double r4,ModelOptions myOptions, std::map<std::string,DoubleSec>& timers ,chosenReactionChannel chosenRxn,std::vector<Reaction> reactionList,int length, double ratesByLength_lengthRi,std::vector<double> transport_factor,std::vector<double> ksteptimesstar);
 
 bool isThreeMemberedRing(LoopParticipants pairToLoop,Graph polymer);
 

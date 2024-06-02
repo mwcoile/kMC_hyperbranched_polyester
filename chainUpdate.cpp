@@ -684,13 +684,13 @@ grouptwoselection:
     return selectedGroups;
 }
 
-void linkingRxn(SystemVariables &cSS, Reaction rxn,double r3,double r4, ModelOptions myOptions,std::map<std::string,DoubleSec>& timers,chosenReactionChannel chosenRxn, std::vector<Reaction> reactionList,int length, double ratesByLength_lengthRi,std::vector<double> transport_factor,std::vector<double> ksteptimesstar,std::ofstream& statusFile) {
+void linkingRxn(SystemVariables &cSS, Reaction rxn,double r3,double r4, ModelOptions myOptions,std::map<std::string,DoubleSec>& timers,chosenReactionChannel chosenRxn, std::vector<Reaction> reactionList,int length, double ratesByLength_lengthRi,std::vector<double> transport_factor,std::vector<double> ksteptimesstar) {
     // this function carries out the polymerization linking reaction that forms a bond between a monomer
     // containing reactant 1 and a monomer containing reactant 2.
     
     
-    statusFile << "start inside linkingRxn " << cSS.executionNumber << std::endl;
-    statusFile << std::flush;
+    // statusFile << "start inside linkingRxn " << cSS.executionNumber << std::endl;
+    // statusFile << std::flush;
     UpdateNMBLInput inputNMBL;
     inputNMBL.rxnType="linking";
     std::string reactant1 = rxn.reactants[0];;
@@ -712,15 +712,15 @@ void linkingRxn(SystemVariables &cSS, Reaction rxn,double r3,double r4, ModelOpt
         selectedReactant2 = linearSearchForParticipatingGroup(cSS,r4,reactant2,myOptions.trackFullStructureAsGraph);
     }
     else if (chosenRxn.isLengthDependent==true) {
-        statusFile << "start lengthDependentSearchForParticipatingGroups " << cSS.executionNumber << std::endl;
-        statusFile << std::flush;
+        // statusFile << "start lengthDependentSearchForParticipatingGroups " << cSS.executionNumber << std::endl;
+        // statusFile << std::flush;
         // figure out which chain to react if it's length dependent
         lengthBasedGroupLocations reactTheseGroups = lengthDependentSearchForParticipatingGroups( cSS, r3, r4, reactant1, reactant2,  length, ratesByLength_lengthRi,transport_factor,ksteptimesstar[chosenRxn.mu-4]);
         selectedReactant1=reactTheseGroups.grp1;
         selectedReactant2=reactTheseGroups.grp2;
 
-        statusFile << "stop lengthDependentSearchForParticipatingGroups " << cSS.executionNumber << std::endl;
-        statusFile << std::flush;
+        // statusFile << "stop lengthDependentSearchForParticipatingGroups " << cSS.executionNumber << std::endl;
+        // statusFile << std::flush;
     }
     
     if (selectedReactant1.whichChain>-1) {
@@ -740,8 +740,8 @@ void linkingRxn(SystemVariables &cSS, Reaction rxn,double r3,double r4, ModelOpt
     // step 1: identify which two specific species containing these moeities to react together!
     // auto start = Time::now(); // start clock
 
-    statusFile << "start regular linking " << cSS.executionNumber << std::endl;
-    statusFile << std::flush;
+    // statusFile << "start regular linking " << cSS.executionNumber << std::endl;
+    // statusFile << std::flush;
     // auto stop = Time::now(); // stop clock
     // timers["linearSearchForParticipatingGroup"] += (stop - start);
     // use the following for shorthand so that lines of code don't get too long
@@ -1052,7 +1052,7 @@ void linkingRxn(SystemVariables &cSS, Reaction rxn,double r3,double r4, ModelOpt
         if (whichChain1==whichChain2) {
             // Note: loop formation is a unimolecular reaction. If loop formation were allowed here, the rate of loop formation would be dependent upon system size--in a larger system, the same would be less likely to serendipitously choose two of the same chain
             if (myOptions.loopingSeparateChannel==true) {
-                std::cout << "Same Chain Chosen for Not Looping Rxn! Skip execution # " << cSS.executionNumber << std::endl;
+                //std::cout << "Same Chain Chosen for Not Looping Rxn! Skip execution # " << cSS.executionNumber << std::endl;
                 cSS.mwv.sameChain=true; // don't want to update molecular weight if no reaction was executed!
                 cSS.rejectedSteps++;
                 
@@ -3013,7 +3013,7 @@ void transformLinkTypeRxn(SystemVariables &cSS, Reaction rxn,double r3,double r4
 }
 
 
-void updateSystemState(SystemVariables &cSS, Reaction rxn,double r3,double r4,ModelOptions myOptions, std::map<std::string,DoubleSec>& timers ,chosenReactionChannel chosenRxn, std::vector<Reaction> reactionList,int length, double ratesByLength_lengthRi,std::vector<double> transport_factor,std::vector<double> ksteptimesstar,std::ofstream& statusFile) {
+void updateSystemState(SystemVariables &cSS, Reaction rxn,double r3,double r4,ModelOptions myOptions, std::map<std::string,DoubleSec>& timers ,chosenReactionChannel chosenRxn, std::vector<Reaction> reactionList,int length, double ratesByLength_lengthRi,std::vector<double> transport_factor,std::vector<double> ksteptimesstar) {
 
     if (cSS.executionNumber>=272) {
         //linearSearchForParticipatingGroupByLength(cSS,0.99999,"Em",4);
@@ -3042,12 +3042,12 @@ void updateSystemState(SystemVariables &cSS, Reaction rxn,double r3,double r4,Mo
         // i.e., a bimolecular reaction linking two monomers together (a typical polymerization reaction)
         // DoubleTimePoint start = Time::now(); //get the time at this instant
 
-        statusFile << "start linkingRxn " << cSS.executionNumber << std::endl;
-        statusFile << std::flush;
-        linkingRxn(cSS,rxn,r3,r4,myOptions,timers,chosenRxn,reactionList, length, ratesByLength_lengthRi, transport_factor, ksteptimesstar,statusFile);
+        // statusFile << "start linkingRxn " << cSS.executionNumber << std::endl;
+        // statusFile << std::flush;
+        linkingRxn(cSS,rxn,r3,r4,myOptions,timers,chosenRxn,reactionList, length, ratesByLength_lengthRi, transport_factor, ksteptimesstar);
         
-        statusFile << "stop linkingRxn " << cSS.executionNumber << std::endl;
-        statusFile << std::flush;
+        // statusFile << "stop linkingRxn " << cSS.executionNumber << std::endl;
+        // statusFile << std::flush;
         // DoubleTimePoint stop = Time::now(); //get the time at this instant 
         // timers["linking"] += (stop - start);
     }
@@ -3073,14 +3073,14 @@ void updateSystemState(SystemVariables &cSS, Reaction rxn,double r3,double r4,Mo
         // execute a random scission reaction in which the functional groups on monomers participating 
         // in the link to be broken must be kjnown
         DoubleTimePoint start = Time::now(); //get the time at this instant
-        statusFile << "start breakingRxn " << cSS.executionNumber << std::endl;
-        statusFile << std::flush;
+        // statusFile << "start breakingRxn " << cSS.executionNumber << std::endl;
+        // statusFile << std::flush;
         adjacentBreakingRxn(cSS,rxn,r3,r4,myOptions,timers);
         DoubleTimePoint stop = Time::now(); //get the time at this instant
         timers["adjBreaking"] += (stop - start);
 
-        statusFile << "stop breakingRxn " << cSS.executionNumber << std::endl;
-        statusFile << std::flush;
+        // statusFile << "stop breakingRxn " << cSS.executionNumber << std::endl;
+        // statusFile << std::flush;
     }
     else if (rxn.reactionType=="carbamatedecomposition") {
         // DoubleTimePoint start = Time::now(); //get the time at this instant 

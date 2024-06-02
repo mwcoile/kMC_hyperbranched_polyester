@@ -35,7 +35,7 @@ double approxChainLengthDependentk(int i) {
     double l = 1.0;
     
     double Ha_ij = phi*pow(i,l-0.5)/4.0;
-    double Kij_divided_by_k_int = 1 / (1.0 + Ha_ij);
+    double Kij_divided_by_k_int = 1; // / (1.0 + Ha_ij);
     return Kij_divided_by_k_int; //1.0
 }
 
@@ -207,7 +207,7 @@ int main() {
     // random number generation, slightly more sophisticated than using std::rand
     // based on example here https://stackoverflow.com/questions/288739/generate-random-numbers-uniformly-over-an-entire-range
     std::random_device rand_dev; // obtain unsigned int seed from a random device (e.g., time(0)) by calling rand_dev()
-    unsigned int seed = 3582795442; // rand_dev(); //1797740251 // currently busted with seed 961071223 // try 1386656568 //works with 1124697860; // for debugging, can set this to a constant value if desired, e.g., 1086615307; 
+    unsigned int seed = rand_dev(); //1797740251 // currently busted with seed 961071223 // try 1386656568 //works with 1124697860; // for debugging, can set this to a constant value if desired, e.g., 1086615307; 
     std::mt19937 generator(seed); // generator(rand_dev()); 
     //std::cout << seed << std::endl; // write this out to the standard output...
     const double range_from = 0; // min value in range (inclusive)
@@ -244,8 +244,8 @@ int main() {
     if (myOptions.eG) {
         eG.open("./Output/"+strdate+"endgrpfrs" + ".txt");
     }
-    std::ofstream statusFile;
-    statusFile.open("./Output/"+runID+"statusFile.txt");
+    //std::ofstream // statusFile;
+    // statusFile.open("./Output/"+runID+"statusFile.txt");
     // calculate simulation volume
     const double Na = 6.022E23; // avogadro's number: items per mole
     double V = (1.0*myConditions.simulationSize)/(Na*myConditions.totalMonomerConcentration); // control volume in L assuming concentration is in mol/L 
@@ -313,16 +313,16 @@ int main() {
     //     "2-b-3-*_step4    2-b-4-*_step4  2-a-3-*_step4   2-a-5-*_step4  2-b-3-*_step4 2-b-4-*_step4 4-b-4-*_step4 4-a-3-*_step4 4-b-1-*_step4 4-b-1-*_step4 \n";
     std::map<std::string,bool> didIprint;
     // kMC loop!
-    while (totalRate>0 && simTime<60*60*24*2) {
-        statusFile << "start of kMC loop " << cSS.executionNumber << std::endl;
-        statusFile << std::flush;
+    while (totalRate>0 && simTime<60*60*24*2 && over_x<0.95) {
+        // statusFile << "start of kMC loop " << cSS.executionNumber << std::endl;
+        // statusFile << std::flush;
 
         if (cSS.rejectedSteps>20) {
             std::cout << " breaking out of kMC loop because too many rejected steps" << std::endl;
             break;
         }
         if (cSS.rejectedSteps>0) {
-            std::cout << "rejected steps: " << cSS.rejectedSteps << std::endl;
+            //std::cout << "rejected steps: " << cSS.rejectedSteps << std::endl;
         }
 
         if (timeShit) {
@@ -436,7 +436,16 @@ int main() {
         +capK["R9"]["Kstep1"]*capK["R9"]["Kstep2"]*cSS.numMoieties["cEp"]*cSS.numMoieties["cEp"]*1.0/(V*Na)*1.0/(V*Na)
         +capK["R10"]["Kstep1"]*capK["R10"]["Kstep2"]*cSS.numMoieties["cE"]*cSS.numMoieties["cEp"]*1.0/(V*Na)*1.0/(V*Na);
 
-        double otherBindingSites = capK["R9"]["Kbind"]*cSS.numMoieties["cEp"]*cSS.numMoieties["cEp"]*1.0/(V*Na)*1.0/(V*Na);
+        double otherBindingSites = capK["R9"]["Kbind"]*cSS.numMoieties["cEp"]*cSS.numMoieties["cEp"]*1.0/(V*Na)*1.0/(V*Na)
+        +capK["R9"]["Kbind"]*cSS.numMoieties["cEp"]*cSS.numMoieties["Ep"]*1.0/(V*Na)*1.0/(V*Na)
+        +capK["R9"]["Kbind"]*cSS.numMoieties["cEp"]*cSS.numMoieties["Em"]*1.0/(V*Na)*1.0/(V*Na)
+        +capK["R9"]["Kbind"]*cSS.numMoieties["cEp"]*cSS.numMoieties["Emp"]*1.0/(V*Na)*1.0/(V*Na)
+        +capK["R9"]["Kbind"]*cSS.numMoieties["Emp"]*cSS.numMoieties["Emp"]*1.0/(V*Na)*1.0/(V*Na)
+        +capK["R9"]["Kbind"]*cSS.numMoieties["Emp"]*cSS.numMoieties["Em"]*1.0/(V*Na)*1.0/(V*Na)
+        +capK["R9"]["Kbind"]*cSS.numMoieties["Emp"]*cSS.numMoieties["Ep"]*1.0/(V*Na)*1.0/(V*Na)
+        +capK["R9"]["Kbind"]*cSS.numMoieties["Ep"]*cSS.numMoieties["Ep"]*1.0/(V*Na)*1.0/(V*Na)
+        +capK["R9"]["Kbind"]*cSS.numMoieties["Ep"]*cSS.numMoieties["Em"]*1.0/(V*Na)*1.0/(V*Na)
+        +capK["R9"]["Kbind"]*cSS.numMoieties["Em"]*cSS.numMoieties["Em"]*1.0/(V*Na)*1.0/(V*Na);
 
         double reverseBindingSites = capK["R1"]["Kprimestep5"]*capK["R1"]["Kprimestep6"]*cSS.links[P1]*1.0/(V*Na)
         +capK["R2"]["Kprimestep5"]*capK["R2"]["Kprimestep6"]*cSS.links[P2]*1.0/(V*Na)
@@ -474,8 +483,8 @@ int main() {
 	std::vector<double> ratesDebugging(20,0);
         std::map<std::string,double> lengthDependentRateSums;
         // I think it's easier to just entirely rewrite this for v5.
-        statusFile << "start of propensity calculations " << cSS.executionNumber << std::endl;
-        statusFile << std::flush;
+        // statusFile << "start of propensity calculations " << cSS.executionNumber << std::endl;
+        // statusFile << std::flush;
         for (int i=0; i<reactionList.size(); ++i) {
             if (reactionList[i].reactants.size()!=2 || reactionList[i].products.size()!=2) {
                 throw std::runtime_error("2 reactants and 2 products should be specified for all reactions in Changxia's system.");
@@ -700,8 +709,8 @@ int main() {
             
         }
 
-        statusFile << "end propensity calculations " << cSS.executionNumber << std::endl;
-        statusFile << std::flush;
+        // statusFile << "end propensity calculations " << cSS.executionNumber << std::endl;
+        // statusFile << std::flush;
    	// for the chain+chain reactions, check that the sum of entries in ratesByLength is equivalent to the corresponding rate in ratesDebugging...
 	// std::vector<std::string> chainChainRxns = {"R5","R6","R7","R8"};
 	// for (int j=0;j<chainChainRxns.size();++j) {
@@ -797,10 +806,10 @@ int main() {
         // let's set the reaction type in "chosenRxn"
         
         
-        statusFile << "about to call updateSystemState " << cSS.executionNumber << std::endl;
-        statusFile << std::flush;
+        // statusFile << "about to call updateSystemState " << cSS.executionNumber << std::endl;
+        // statusFile << std::flush;
         //if (mu<rate.size()) {
-        updateSystemState(cSS, reactionList[chosenRxn.mu], r3, r4, myOptions,timers,chosenRxn,reactionList,chosenRxn.length,ratesByLength[chosenRxn.length][chosenRxn.chosenR_i],transport_factor,ksteptimesstar,statusFile);
+        updateSystemState(cSS, reactionList[chosenRxn.mu], r3, r4, myOptions,timers,chosenRxn,reactionList,chosenRxn.length,ratesByLength[chosenRxn.length][chosenRxn.chosenR_i],transport_factor,ksteptimesstar);
             // note that this assumes no steps were rejected
             //cSS.reactionsExecutedTally[mu]++; // increment tally of this reaction type
         //}
@@ -816,8 +825,8 @@ int main() {
             startmolwt = Time::now(); //get the time at this instant 
         }
 
-        statusFile << "done with updatesystem state, call mol weight fxn " << cSS.executionNumber << std::endl;
-        statusFile << std::flush;
+        // statusFile << "done with updatesystem state, call mol weight fxn " << cSS.executionNumber << std::endl;
+        // statusFile << std::flush;
         cSS.mwv=molecularWeight(cSS.mwv); 
         
         if (timeShit) {
@@ -827,8 +836,8 @@ int main() {
 
         }
 
-        statusFile << "mol weight done, start writing to files if correct execution " << cSS.executionNumber << std::endl; 
-        statusFile << std::flush;
+        // statusFile << "mol weight done, start writing to files if correct execution " << cSS.executionNumber << std::endl; 
+        // statusFile << std::flush;
         over_x=1-((1.0*cSS.numMoieties["cEp"])/(1.0*myConditions.numMoieties0["cEp"])); // monomer conversion
         // if (cSS.executionNumber%200==0) {
         //     coverages << simTime << "   " << over_x << "   "<< 1/denom << "   "
@@ -1002,8 +1011,8 @@ int main() {
             stopKMCInnerLoop = Time::now(); //get the timepoint at this instant 
             innerLoopTime += stopKMCInnerLoop-startKMCInnerLoop;
         }
-        statusFile << "stop writing to files: end kMC loop " << cSS.executionNumber << std::endl; 
-        statusFile << std::flush;
+        // statusFile << "stop writing to files: end kMC loop " << cSS.executionNumber << std::endl; 
+        // statusFile << std::flush;
     }
     if (timeShit) {
         stopKMC = Time::now(); //get the timepoint at this instant 
@@ -1075,8 +1084,8 @@ int main() {
     reactionsFile.close();
     coverages.close();
     
-    statusFile << "end simulation " << cSS.executionNumber << std::endl; 
-    statusFile << std::flush;
-    statusFile.close();
+    // statusFile << "end simulation " << cSS.executionNumber << std::endl; 
+    // statusFile << std::flush;
+    // statusFile.close();
     return 0;
 }
