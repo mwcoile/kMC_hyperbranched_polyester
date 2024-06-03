@@ -2,10 +2,10 @@
 #SBATCH -N 1
 #SBATCH -p buyin
 #SBATCH --ntasks-per-node=1
-#SBATCH --array=1-20
-#SBATCH -t 480:00:00
+#SBATCH --array=1-10
+#SBATCH -t 72:00:00
 #SBATCH -A b1039
-#SBATCH --job-name="memAccess"
+#SBATCH --job-name="congratsguanhua"
 #SBATCH --output=p.%A_%a.out
 
 cd ${SLURM_SUBMIT_DIR}

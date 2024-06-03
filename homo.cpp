@@ -307,7 +307,7 @@ int main() {
     cSS.numMoietiesByLength = numMoietiesByLength;
     std::ofstream coverages;
     coverages.open("./Output/" + strdate + runID + "coverages.txt");
-    coverages << "time  X    3R1*	2R2*	3R3*	M*	1R*	2R*	3R*	4R*	5R*	6R*	7R*	8R*	9R*	10R*	1I*	2I*	3I*	4I*	5I*	6I*	7I*	8I*	9I*	10I*	1P*	2P*	3P*	4P*	5P*	6P*	7P*	8P*	9P*	10P* \n";
+    coverages << "time  X    3R1*	2R2*	3R3*	M*	1R*	2R*	3R*	4R*	5R*	6R*	7R*	8R*	9R*	10R*	C1*	C2*	C3*	C4*	C5*	C6*	C7*	C8*	C9*	C10*	1I*	2I*	3I*	4I*	5I*	6I*	7I*	8I*	9I*	10I*	1P*	2P*	3P*	4P*	5P*	6P*	7P*	8P*	9P*	10P*	1P2*	2P2*	3P2*	4P2*	5P2*	6P2*	7P2*	8P2*	9P2*	10P2* \n";
     // coverages << "time  X  * 5-*_step1   2-*_step1 4-*_step1 M-*_step1 M-1-*_step1   M-*-M_competitive   2-b-3_step3 " <<
     //     "2-b-4-*_step3  2-a-3-*_step3   2-a-5-*_step3 2-b-3-*_step3 2-b-4-*_step3 4-b-4-*_step3 4-a-3-*_step3 4-b-1-*_step3 4-b-1-*_step3" <<
     //     "2-b-3-*_step4    2-b-4-*_step4  2-a-3-*_step4   2-a-5-*_step4  2-b-3-*_step4 2-b-4-*_step4 4-b-4-*_step4 4-a-3-*_step4 4-b-1-*_step4 4-b-1-*_step4 \n";
@@ -433,16 +433,21 @@ int main() {
         +capK["R1"]["Kstep1"]*capK["R1"]["Kstep2"]*cSS.numMoieties["cEp"]*cSS.numMoieties["Ep"]*1.0/(V*Na)*1.0/(V*Na)
         +capK["R2"]["Kstep1"]*capK["R2"]["Kstep2"]*cSS.numMoieties["cEp"]*cSS.numMoieties["Emp"]*1.0/(V*Na)*1.0/(V*Na)
         +capK["R3"]["Kstep1"]*capK["R3"]["Kstep2"]*cSS.numMoieties["cEp"]*cSS.numMoieties["Em"]*1.0/(V*Na)*1.0/(V*Na)
+        +capK["R4"]["Kstep1"]*capK["R4"]["Kstep2"]*cSS.numMoieties["cEp"]*cSS.numMoieties["Emp"]*1.0/(V*Na)*1.0/(V*Na)
+        +capK["R5"]["Kstep1"]*capK["R5"]["Kstep2"]*cSS.numMoieties["cE"]*cSS.numMoieties["Ep"]*1.0/(V*Na)*1.0/(V*Na)
+        +capK["R6"]["Kstep1"]*capK["R6"]["Kstep2"]*cSS.numMoieties["cE"]*cSS.numMoieties["Emp"]*1.0/(V*Na)*1.0/(V*Na)
+        +capK["R7"]["Kstep1"]*capK["R7"]["Kstep2"]*cSS.numMoieties["cE"]*cSS.numMoieties["Em"]*1.0/(V*Na)*1.0/(V*Na)
+        +capK["R8"]["Kstep1"]*capK["R8"]["Kstep2"]*cSS.numMoieties["cE"]*cSS.numMoieties["Emp"]*1.0/(V*Na)*1.0/(V*Na)
         +capK["R9"]["Kstep1"]*capK["R9"]["Kstep2"]*cSS.numMoieties["cEp"]*cSS.numMoieties["cEp"]*1.0/(V*Na)*1.0/(V*Na)
         +capK["R10"]["Kstep1"]*capK["R10"]["Kstep2"]*cSS.numMoieties["cE"]*cSS.numMoieties["cEp"]*1.0/(V*Na)*1.0/(V*Na);
 
         double otherBindingSites = capK["R9"]["Kbind"]*cSS.numMoieties["cEp"]*cSS.numMoieties["cEp"]*1.0/(V*Na)*1.0/(V*Na)
         +capK["R9"]["Kbind"]*cSS.numMoieties["cEp"]*cSS.numMoieties["Ep"]*1.0/(V*Na)*1.0/(V*Na)
         +capK["R9"]["Kbind"]*cSS.numMoieties["cEp"]*cSS.numMoieties["Em"]*1.0/(V*Na)*1.0/(V*Na)
-        +capK["R9"]["Kbind"]*cSS.numMoieties["cEp"]*cSS.numMoieties["Emp"]*1.0/(V*Na)*1.0/(V*Na)
-        +capK["R9"]["Kbind"]*cSS.numMoieties["Emp"]*cSS.numMoieties["Emp"]*1.0/(V*Na)*1.0/(V*Na)
-        +capK["R9"]["Kbind"]*cSS.numMoieties["Emp"]*cSS.numMoieties["Em"]*1.0/(V*Na)*1.0/(V*Na)
-        +capK["R9"]["Kbind"]*cSS.numMoieties["Emp"]*cSS.numMoieties["Ep"]*1.0/(V*Na)*1.0/(V*Na)
+        +2*capK["R9"]["Kbind"]*cSS.numMoieties["cEp"]*cSS.numMoieties["Emp"]*1.0/(V*Na)*1.0/(V*Na)
+        +4*capK["R9"]["Kbind"]*cSS.numMoieties["Emp"]*cSS.numMoieties["Emp"]*1.0/(V*Na)*1.0/(V*Na)
+        +2*capK["R9"]["Kbind"]*cSS.numMoieties["Emp"]*cSS.numMoieties["Em"]*1.0/(V*Na)*1.0/(V*Na)
+        +2*capK["R9"]["Kbind"]*cSS.numMoieties["Emp"]*cSS.numMoieties["Ep"]*1.0/(V*Na)*1.0/(V*Na)
         +capK["R9"]["Kbind"]*cSS.numMoieties["Ep"]*cSS.numMoieties["Ep"]*1.0/(V*Na)*1.0/(V*Na)
         +capK["R9"]["Kbind"]*cSS.numMoieties["Ep"]*cSS.numMoieties["Em"]*1.0/(V*Na)*1.0/(V*Na)
         +capK["R9"]["Kbind"]*cSS.numMoieties["Em"]*cSS.numMoieties["Em"]*1.0/(V*Na)*1.0/(V*Na);
@@ -909,11 +914,24 @@ int main() {
             << capK["R1"]["Kstep1"]*capK["R1"]["Kstep2"]*cSS.numMoieties["cEp"]*cSS.numMoieties["Ep"]*1.0/(V*Na)*1.0/(V*Na)/denom << "  "
             << capK["R2"]["Kstep1"]*capK["R2"]["Kstep2"]*cSS.numMoieties["cEp"]*cSS.numMoieties["Emp"]*1.0/(V*Na)*1.0/(V*Na)/denom << "  "
             << capK["R3"]["Kstep1"]*capK["R3"]["Kstep2"]*cSS.numMoieties["cEp"]*cSS.numMoieties["Em"]*1.0/(V*Na)*1.0/(V*Na)/denom << "  "
+            << capK["R4"]["Kstep1"]*capK["R4"]["Kstep2"]*cSS.numMoieties["cEp"]*cSS.numMoieties["Emp"]*1.0/(V*Na)*1.0/(V*Na) << "  "
+            << capK["R5"]["Kstep1"]*capK["R5"]["Kstep2"]*cSS.numMoieties["cE"]*cSS.numMoieties["Ep"]*1.0/(V*Na)*1.0/(V*Na) << "  "
+            << capK["R6"]["Kstep1"]*capK["R6"]["Kstep2"]*cSS.numMoieties["cE"]*cSS.numMoieties["Emp"]*1.0/(V*Na)*1.0/(V*Na) << "  "
+            << capK["R7"]["Kstep1"]*capK["R7"]["Kstep2"]*cSS.numMoieties["cE"]*cSS.numMoieties["Em"]*1.0/(V*Na)*1.0/(V*Na) << "  "
+            << capK["R8"]["Kstep1"]*capK["R8"]["Kstep2"]*cSS.numMoieties["cE"]*cSS.numMoieties["Emp"]*1.0/(V*Na)*1.0/(V*Na) << "  "
             << capK["R9"]["Kstep1"]*capK["R9"]["Kstep2"]*cSS.numMoieties["cEp"]*cSS.numMoieties["cEp"]*1.0/(V*Na)*1.0/(V*Na)/denom << "  "
             << capK["R10"]["Kstep1"]*capK["R10"]["Kstep2"]*cSS.numMoieties["cE"]*cSS.numMoieties["cEp"]*1.0/(V*Na)*1.0/(V*Na)/denom << "  "
-
+            
             << capK["R9"]["Kbind"]*cSS.numMoieties["cEp"]*cSS.numMoieties["cEp"]*1.0/(V*Na)*1.0/(V*Na)/denom << "  "
-
+            << capK["R9"]["Kbind"]*cSS.numMoieties["cEp"]*cSS.numMoieties["Ep"]*1.0/(V*Na)*1.0/(V*Na) <<  "  " 
+            << capK["R9"]["Kbind"]*cSS.numMoieties["cEp"]*cSS.numMoieties["Em"]*1.0/(V*Na)*1.0/(V*Na) <<  "  "
+            << 2*capK["R9"]["Kbind"]*cSS.numMoieties["cEp"]*cSS.numMoieties["Emp"]*1.0/(V*Na)*1.0/(V*Na) <<  "  "
+            << 4*capK["R9"]["Kbind"]*cSS.numMoieties["Emp"]*cSS.numMoieties["Emp"]*1.0/(V*Na)*1.0/(V*Na) <<  "  "
+            << 2*capK["R9"]["Kbind"]*cSS.numMoieties["Emp"]*cSS.numMoieties["Em"]*1.0/(V*Na)*1.0/(V*Na) <<  "  "
+            << 2*capK["R9"]["Kbind"]*cSS.numMoieties["Emp"]*cSS.numMoieties["Ep"]*1.0/(V*Na)*1.0/(V*Na) <<  "  "
+            << capK["R9"]["Kbind"]*cSS.numMoieties["Ep"]*cSS.numMoieties["Ep"]*1.0/(V*Na)*1.0/(V*Na) <<  "  "
+            << capK["R9"]["Kbind"]*cSS.numMoieties["Ep"]*cSS.numMoieties["Em"]*1.0/(V*Na)*1.0/(V*Na) <<  "  "
+            << capK["R9"]["Kbind"]*cSS.numMoieties["Em"]*cSS.numMoieties["Em"]*1.0/(V*Na)*1.0/(V*Na) <<  "  "
             << capK["R1"]["Kprimestep5"]*capK["R1"]["Kprimestep6"]*cSS.links[P1]*1.0/(V*Na)/denom << "  "
             << capK["R2"]["Kprimestep5"]*capK["R2"]["Kprimestep6"]*cSS.links[P2]*1.0/(V*Na)/denom << "  "
             << capK["R3"]["Kprimestep5"]*capK["R3"]["Kprimestep6"]*cSS.links[P3]*1.0/(V*Na)/denom << "  "
