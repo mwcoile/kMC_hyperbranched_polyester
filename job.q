@@ -1,11 +1,11 @@
 #!/bin/bash
 #SBATCH -N 1
-#SBATCH -p buyin
+#SBATCH -p shared
 #SBATCH --ntasks-per-node=1
-#SBATCH --array=1-20
-#SBATCH -t 480:00:00
-#SBATCH -A b1039
-#SBATCH --job-name="memAccess"
+#SBATCH --array=1-3
+#SBATCH -t 48:00:00
+#SBATCH -A TG-CTS120055
+#SBATCH --job-name="unnamed"
 #SBATCH --output=p.%A_%a.out
 
 cd ${SLURM_SUBMIT_DIR}
