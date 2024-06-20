@@ -1,12 +1,5 @@
 # Overview
 
-this is copied from "Microkinetic_kMC_v6_chainlengthdependent_step0p6chain2p35_kinstepg2p4x_phi1p4_50k_coveragesandgraphs_R9x2_netrateanalysis_moregraphs" , I am trying to find the issue that causes the code to occasionally crash for no apparent reason.
-
-this is for learning cmakelists, copied from microkinetic_kMC_v6
-
-some helpful resources: https://cmake.org/cmake/help/latest/guide/tutorial/index.html
-https://medium.com/@dexterchan_44737/visual-studio-code-build-and-debug-a-c-with-cmake-on-mac-os-7633bc59bf34
-
 This code is designed to be used to model step-growth polymerization. To run the code from the command line using a bash shell, first run "make" to compile the file into "model", then edit the input.txt file to include the reactions you would like to simulate in this system, and then run the code using ./model.
 
 About the algorithm:
@@ -58,4 +51,11 @@ eG: if true, write end group analysis to file
 trackAllLinks: if true, track not only the edge name but also the name of each monomer (stored in a singular functional group on each monomer) participating in a particular bond. For this to work, the
 loopingSeparateChannel: are looping reactions considered to be separate reaction channels, or should they just be lumped into the bimolecular reactions? If true that looping is considered a separate reaction channel, then loopPairs should be tracked (particuarly below the gel point)--otherwise the code doesn't know what to select... 
 };
+
+this is copied from "Microkinetic_kMC_v6_chainlengthdependent_step0p6chain2p35_kinstepg2p4x_phi1p4_50k_coveragesandgraphs_R9x2_netrateanalysis_moregraphs" , I was trying to find the issue that causes the code to occasionally crash for no apparent reason.
+
+this is for learning cmakelists, copied from microkinetic_kMC_v6
+
+some helpful resources: https://cmake.org/cmake/help/latest/guide/tutorial/index.html
+https://medium.com/@dexterchan_44737/visual-studio-code-build-and-debug-a-c-with-cmake-on-mac-os-7633bc59bf34
 
