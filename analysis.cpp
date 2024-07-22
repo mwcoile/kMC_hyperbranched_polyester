@@ -32,11 +32,18 @@ void print_graph(std::vector<Chain> chainPool,std::string TimePoint) {
     }
     auto vpair = boost::vertices(myGraph);
     theGraphNodes << "Id,Name \n";
-
+    nodeCount=0;
     for (auto iter = vpair.first; iter!=vpair.second;iter++) {
         // get the name of the functional group
         std::string nodeName = getChainUnitName(myGraph[*iter]);
         theGraphNodes << *iter << "," << nodeName << "\n";
+        nodeCount++;
+    }
+    int i = 0
+    while (i<cSS.numMonomers["cEp"]) {
+        theGraphNodes << nodeCount << ",cEp \n";
+        nodeCount++;
+        i++;
     }
     // std::copy(vpair.first, vpair.second,
     // //     std::ostream_iterator<boost::adjacency_list<>::vertex_descriptor>{
