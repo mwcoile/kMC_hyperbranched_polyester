@@ -31,11 +31,11 @@ double chainLengthDependentk(int i, int j, double k_int) {
 double approxChainLengthDependentk(int i) {
     // i is the length of the shorter of two chains participating in a reaction 
     // k_int is the intrinsic reaction rate 
-    double phi = 1.4*4; // 3.5E-9
+    double phi = 0.75*4; // 3.5E-9
     double l = 1.0;
     
     double Ha_ij = phi*pow(i,l-0.5)/4.0;
-    double Kij_divided_by_k_int = 1; // / (1.0 + Ha_ij);
+    double Kij_divided_by_k_int = 1 / (1.0 + Ha_ij);
     return Kij_divided_by_k_int; //1.0
 }
 
@@ -307,7 +307,7 @@ int main() {
     cSS.numMoietiesByLength = numMoietiesByLength;
     std::ofstream coverages;
     coverages.open("./Output/" + strdate + runID + "coverages.txt");
-    coverages << "time  X    3R1*	2R2*	3R3*	M*	1R*	2R*	3R*	4R*	5R*	6R*	7R*	8R*	9R*	10R*	C1*	C2*	C3*	C4*	C5*	C6*	C7*	C8*	C9*	C10*	1I*	2I*	3I*	4I*	5I*	6I*	7I*	8I*	9I*	10I*	1P*	2P*	3P*	4P*	5P*	6P*	7P*	8P*	9P*	10P*	1P2*	2P2*	3P2*	4P2*	5P2*	6P2*	7P2*	8P2*	9P2*	10P2* \n";
+    coverages << "time  X    3R1*	2R2*	3R3*	M*	1R*	2R*	3R*	4R*	5R*	6R*	7R*	8R*	9R*	10R*	1I*	2I*	3I*	4I*	5I*	6I*	7I*	8I*	9I*	10I*	1P*	2P*	3P*	4P*	5P*	6P*	7P*	8P*	9P*	10P* \n";
     // coverages << "time  X  * 5-*_step1   2-*_step1 4-*_step1 M-*_step1 M-1-*_step1   M-*-M_competitive   2-b-3_step3 " <<
     //     "2-b-4-*_step3  2-a-3-*_step3   2-a-5-*_step3 2-b-3-*_step3 2-b-4-*_step3 4-b-4-*_step3 4-a-3-*_step3 4-b-1-*_step3 4-b-1-*_step3" <<
     //     "2-b-3-*_step4    2-b-4-*_step4  2-a-3-*_step4   2-a-5-*_step4  2-b-3-*_step4 2-b-4-*_step4 4-b-4-*_step4 4-a-3-*_step4 4-b-1-*_step4 4-b-1-*_step4 \n";
@@ -445,7 +445,7 @@ int main() {
         +capK["R9"]["Kbind"]*cSS.numMoieties["cEp"]*cSS.numMoieties["Ep"]*1.0/(V*Na)*1.0/(V*Na)
         +capK["R9"]["Kbind"]*cSS.numMoieties["cEp"]*cSS.numMoieties["Em"]*1.0/(V*Na)*1.0/(V*Na)
         +2*capK["R9"]["Kbind"]*cSS.numMoieties["cEp"]*cSS.numMoieties["Emp"]*1.0/(V*Na)*1.0/(V*Na)
-        +4*capK["R9"]["Kbind"]*cSS.numMoieties["Emp"]*cSS.numMoieties["Emp"]*1.0/(V*Na)*1.0/(V*Na)
+        +2*2*capK["R9"]["Kbind"]*cSS.numMoieties["Emp"]*cSS.numMoieties["Emp"]*1.0/(V*Na)*1.0/(V*Na)
         +2*capK["R9"]["Kbind"]*cSS.numMoieties["Emp"]*cSS.numMoieties["Em"]*1.0/(V*Na)*1.0/(V*Na)
         +2*capK["R9"]["Kbind"]*cSS.numMoieties["Emp"]*cSS.numMoieties["Ep"]*1.0/(V*Na)*1.0/(V*Na)
         +capK["R9"]["Kbind"]*cSS.numMoieties["Ep"]*cSS.numMoieties["Ep"]*1.0/(V*Na)*1.0/(V*Na)
@@ -921,17 +921,18 @@ int main() {
             << capK["R8"]["Kstep1"]*capK["R8"]["Kstep2"]*cSS.numMoieties["cE"]*cSS.numMoieties["Emp"]*1.0/(V*Na)*1.0/(V*Na)/denom << "  "
             << capK["R9"]["Kstep1"]*capK["R9"]["Kstep2"]*cSS.numMoieties["cEp"]*cSS.numMoieties["cEp"]*1.0/(V*Na)*1.0/(V*Na)/denom << "  "
             << capK["R10"]["Kstep1"]*capK["R10"]["Kstep2"]*cSS.numMoieties["cE"]*cSS.numMoieties["cEp"]*1.0/(V*Na)*1.0/(V*Na)/denom << "  "
-            
+
             << capK["R9"]["Kbind"]*cSS.numMoieties["cEp"]*cSS.numMoieties["cEp"]*1.0/(V*Na)*1.0/(V*Na)/denom << "  "
-            << capK["R9"]["Kbind"]*cSS.numMoieties["cEp"]*cSS.numMoieties["Ep"]*1.0/(V*Na)*1.0/(V*Na)/denom <<  "  " 
-            << capK["R9"]["Kbind"]*cSS.numMoieties["cEp"]*cSS.numMoieties["Em"]*1.0/(V*Na)*1.0/(V*Na)/denom <<  "  "
-            << 2*capK["R9"]["Kbind"]*cSS.numMoieties["cEp"]*cSS.numMoieties["Emp"]*1.0/(V*Na)*1.0/(V*Na)/denom <<  "  "
-            << 4*capK["R9"]["Kbind"]*cSS.numMoieties["Emp"]*cSS.numMoieties["Emp"]*1.0/(V*Na)*1.0/(V*Na)/denom <<  "  "
-            << 2*capK["R9"]["Kbind"]*cSS.numMoieties["Emp"]*cSS.numMoieties["Em"]*1.0/(V*Na)*1.0/(V*Na)/denom <<  "  "
-            << 2*capK["R9"]["Kbind"]*cSS.numMoieties["Emp"]*cSS.numMoieties["Ep"]*1.0/(V*Na)*1.0/(V*Na)/denom <<  "  "
-            << capK["R9"]["Kbind"]*cSS.numMoieties["Ep"]*cSS.numMoieties["Ep"]*1.0/(V*Na)*1.0/(V*Na)/denom <<  "  "
-            << capK["R9"]["Kbind"]*cSS.numMoieties["Ep"]*cSS.numMoieties["Em"]*1.0/(V*Na)*1.0/(V*Na)/denom <<  "  "
-            << capK["R9"]["Kbind"]*cSS.numMoieties["Em"]*cSS.numMoieties["Em"]*1.0/(V*Na)*1.0/(V*Na)/denom <<  "  "
+            << capK["R9"]["Kbind"]*cSS.numMoieties["cEp"]*cSS.numMoieties["Ep"]*1.0/(V*Na)*1.0/(V*Na)/denom << "  "
+            << capK["R9"]["Kbind"]*cSS.numMoieties["cEp"]*cSS.numMoieties["Em"]*1.0/(V*Na)*1.0/(V*Na)/denom << "  "
+            << 2*capK["R9"]["Kbind"]*cSS.numMoieties["cEp"]*cSS.numMoieties["Emp"]*1.0/(V*Na)*1.0/(V*Na)/denom << "  "
+            << 2*2*capK["R9"]["Kbind"]*cSS.numMoieties["Emp"]*cSS.numMoieties["Emp"]*1.0/(V*Na)*1.0/(V*Na)/denom << "  "
+            << 2*capK["R9"]["Kbind"]*cSS.numMoieties["Emp"]*cSS.numMoieties["Em"]*1.0/(V*Na)*1.0/(V*Na)/denom << "  "
+            << 2*capK["R9"]["Kbind"]*cSS.numMoieties["Emp"]*cSS.numMoieties["Ep"]*1.0/(V*Na)*1.0/(V*Na)/denom << "  "
+            << capK["R9"]["Kbind"]*cSS.numMoieties["Ep"]*cSS.numMoieties["Ep"]*1.0/(V*Na)*1.0/(V*Na)/denom << "  "
+            << capK["R9"]["Kbind"]*cSS.numMoieties["Ep"]*cSS.numMoieties["Em"]*1.0/(V*Na)*1.0/(V*Na)/denom << "  "
+            << capK["R9"]["Kbind"]*cSS.numMoieties["Em"]*cSS.numMoieties["Em"]*1.0/(V*Na)*1.0/(V*Na)/denom << "  "
+
             << capK["R1"]["Kprimestep5"]*capK["R1"]["Kprimestep6"]*cSS.links[P1]*1.0/(V*Na)/denom << "  "
             << capK["R2"]["Kprimestep5"]*capK["R2"]["Kprimestep6"]*cSS.links[P2]*1.0/(V*Na)/denom << "  "
             << capK["R3"]["Kprimestep5"]*capK["R3"]["Kprimestep6"]*cSS.links[P3]*1.0/(V*Na)/denom << "  "
@@ -968,14 +969,14 @@ int main() {
         }
         if (simTime>60*5) {
             if (didIprint.find("5")==didIprint.end()) {
-                print_graph(cSS.chainPool,runID+"5min");
+                print_graph(cSS,runID+"5min");
                 didIprint["5"]=true;
             }
         }
         
         if (simTime>60*30) {
             if (didIprint.find("30")==didIprint.end()) {
-                print_graph(cSS.chainPool,runID+"30min");
+                print_graph(cSS,runID+"30min");
                 didIprint["30"]=true;
             }
         }
@@ -983,41 +984,48 @@ int main() {
         if (simTime>60*60) {
             if (didIprint.find("60")==didIprint.end()) {
                 didIprint["60"]=true;
-                print_graph(cSS.chainPool,runID+"60min");
+                print_graph(cSS,runID+"60min");
             }
         }
           
         if (simTime>60*90) {
             if (didIprint.find("90")==didIprint.end()) {
-                print_graph(cSS.chainPool,runID+"90min");
+                print_graph(cSS,runID+"90min");
                 didIprint["90"]=true;
             }
         }
 
         if (simTime>60*120) {
             if (didIprint.find("120")==didIprint.end()) {
-                print_graph(cSS.chainPool,runID+"120min");
+                print_graph(cSS,runID+"120min");
                 didIprint["120"]=true;
             }
         }
 
         if (simTime>60*150) {
             if (didIprint.find("150")==didIprint.end()) {
-                print_graph(cSS.chainPool,runID+"150min");
+                print_graph(cSS,runID+"150min");
                 didIprint["150"]=true;
             }
         }
 
+        if (simTime>60*180) {
+            if (didIprint.find("180")==didIprint.end()) {
+                print_graph(cSS,runID+"180min");
+                didIprint["180"]=true;
+            }    
+        } 
+
         if (simTime>60*210) {
             if (didIprint.find("210")==didIprint.end()) {
-                print_graph(cSS.chainPool,runID+"210min");
+                print_graph(cSS,runID+"210min");
                 didIprint["210"]=true;
             }
         }
 
         if (simTime>60*420) {
             if (didIprint.find("420")==didIprint.end()) {
-                print_graph(cSS.chainPool,runID+"420min");
+                print_graph(cSS,runID+"420min");
                 didIprint["420"]=true;
             }
         }
@@ -1055,7 +1063,7 @@ int main() {
         eG.close();
     }
 
-    print_graph(cSS.chainPool,runID+"end");
+    print_graph(cSS,runID+"end");
 
     if (timeShit) {
         stopprint = Time::now(); // stop clock
