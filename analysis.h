@@ -3,7 +3,7 @@
 #include<vector>
 
 
-void print_graph(SystemVariables cSS,std::string TimePoint);
+void print_graph(std::vector<Chain> chainPool,std::string TimePoint);
 
 void recordChangxiaConcentrations(std::map<std::string,signed long> numMoieties, 
 std::map<std::string,signed long> numMoieties0,double over_x,double simTime,
