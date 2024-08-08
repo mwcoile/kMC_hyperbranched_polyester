@@ -968,14 +968,14 @@ int main() {
         }
         if (simTime>60*5) {
             if (didIprint.find("5")==didIprint.end()) {
-                print_graph(cSS.chainPool,runID+"5min");
+                print_graph(cSS,runID+"5min");
                 didIprint["5"]=true;
             }
         }
         
         if (simTime>60*30) {
             if (didIprint.find("30")==didIprint.end()) {
-                print_graph(cSS.chainPool,runID+"30min");
+                print_graph(cSS,runID+"30min");
                 didIprint["30"]=true;
             }
         }
@@ -983,41 +983,41 @@ int main() {
         if (simTime>60*60) {
             if (didIprint.find("60")==didIprint.end()) {
                 didIprint["60"]=true;
-                print_graph(cSS.chainPool,runID+"60min");
+                print_graph(cSS,runID+"60min");
             }
         }
           
         if (simTime>60*90) {
             if (didIprint.find("90")==didIprint.end()) {
-                print_graph(cSS.chainPool,runID+"90min");
+                print_graph(cSS,runID+"90min");
                 didIprint["90"]=true;
             }
         }
 
         if (simTime>60*120) {
             if (didIprint.find("120")==didIprint.end()) {
-                print_graph(cSS.chainPool,runID+"120min");
+                print_graph(cSS,runID+"120min");
                 didIprint["120"]=true;
             }
         }
 
         if (simTime>60*150) {
             if (didIprint.find("150")==didIprint.end()) {
-                print_graph(cSS.chainPool,runID+"150min");
+                print_graph(cSS,runID+"150min");
                 didIprint["150"]=true;
             }
         }
 
         if (simTime>60*210) {
             if (didIprint.find("210")==didIprint.end()) {
-                print_graph(cSS.chainPool,runID+"210min");
+                print_graph(cSS,runID+"210min");
                 didIprint["210"]=true;
             }
         }
 
         if (simTime>60*420) {
             if (didIprint.find("420")==didIprint.end()) {
-                print_graph(cSS.chainPool,runID+"420min");
+                print_graph(cSS,runID+"420min");
                 didIprint["420"]=true;
             }
         }
@@ -1055,7 +1055,7 @@ int main() {
         eG.close();
     }
 
-    print_graph(cSS.chainPool,runID+"end");
+    print_graph(cSS,runID+"end");
 
     if (timeShit) {
         stopprint = Time::now(); // stop clock

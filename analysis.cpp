@@ -1,9 +1,11 @@
 #include"analysis.h"
 
-void print_graph(std::vector<Chain> chainPool,std::string TimePoint) {
+void print_graph(SystemVariables cSS,std::string TimePoint) {
     // write graph to file -- currently unused
     //
     //     // previously took input boost::property_map<Graph, std::string EdgeData::*>::type namemap
+    
+    std::vector<Chain> chainPool = cSS.chainPool;
     Graph myGraph;
     for (int i=0;i<chainPool.size();i++) {
         copy_graph(chainPool[i].polymer,myGraph);
@@ -20,7 +22,7 @@ void print_graph(std::vector<Chain> chainPool,std::string TimePoint) {
     theGraph.open(graphfilename);
 
     std::ofstream theGraphNodes;
-    std::string nameNodes="graphReadoutNodes.csv";
+    std::string nameNodes="graphReadout" + TimePoint + "Nodes.csv";
     std::string graphfilenameNodes=path+date+nameNodes;
     theGraphNodes.open(graphfilenameNodes);
     auto epair = boost::edges(myGraph);
@@ -32,14 +34,14 @@ void print_graph(std::vector<Chain> chainPool,std::string TimePoint) {
     }
     auto vpair = boost::vertices(myGraph);
     theGraphNodes << "Id,Name \n";
-    nodeCount=0;
+    int nodeCount=0;
     for (auto iter = vpair.first; iter!=vpair.second;iter++) {
         // get the name of the functional group
         std::string nodeName = getChainUnitName(myGraph[*iter]);
         theGraphNodes << *iter << "," << nodeName << "\n";
         nodeCount++;
     }
-    int i = 0
+    int i = 0;
     while (i<cSS.numMonomers["cEp"]) {
         theGraphNodes << nodeCount << ",cEp \n";
         nodeCount++;
