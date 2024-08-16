@@ -1,19 +1,14 @@
 # Overview
 
-this is copied from "Microkinetic_kMC_v6_chainlengthdependent_step0p6chain2p35_kinstepg2p4x_phi1p4_50k_coveragesandgraphs_R9x2_netrateanalysis_moregraphs" , I am trying to find the issue that causes the code to occasionally crash for no apparent reason.
+This code was developed to model the reversible polymerization of a lactone that results in a hyperbranched polyester. A publication is forthcoming describing the results. In the manuscript, we refer to monomer and chain units 1-5. In the code, the following letters are used instead: M = cEp, 1 = cE, 2 = Emp, 3 = E, 4 = Em, 5 = Ep.
 
-this is for learning cmakelists, copied from microkinetic_kMC_v6
-
-some helpful resources: https://cmake.org/cmake/help/latest/guide/tutorial/index.html
-https://medium.com/@dexterchan_44737/visual-studio-code-build-and-debug-a-c-with-cmake-on-mac-os-7633bc59bf34
-
-This code is designed to be used to model step-growth polymerization. To run the code from the command line using a bash shell, first run "make" to compile the file into "model", then edit the input.txt file to include the reactions you would like to simulate in this system, and then run the code using ./model.
+To run the code from the command line using a bash shell, first run "make" to compile the file into "program", then specify reactions you would like to simulate in this system in input.txt, and then run the code using ./program. Alternatively, reactions can be specified in "inputs.cpp" but this will require recompiling the model.
 
 About the algorithm:
 
 This code implements the kinetic Monte Carlo algorithm. Four random numbers are used at each time step. First, r<sub>1</sub> is used to compute the time step between reaction events. It is generated on the interval (0,1]. From interarrival times in a Poisson distribution (independent events occuring at some average rate), the time step is calculated as (1/totalRate)*log(1/r<sub>1</sub>), and zero is excluded from the r<sub>1</sub> interval because that would lead to an infinite time step.
 
-Next, r<sub>2</sub> is used to calculate the reaction event to take place. It is generated on the range (0,1]. The reason why
+Next, r<sub>2</sub> is used to calculate the reaction event to take place. It is generated on the range (0,1].
 Example of criteria: sumRates<r2*totalRate
 so if reaction channel 1 has a rate of 2 and reaction channel 2 has a rate of 1 and reaction channel 3 has a rate is 4 then total rate is 7
 
@@ -39,6 +34,7 @@ Then, r<sub>3</sub> and r<sub>4</sub> (r<sub>4</sub> is only needed if a bimolec
     + Weight of each monomer in the system including those in polymer chains 
 * Structure of each chain stored in an adjacency list where monomers are represented as vertices and bonds are represented as edges (utilizes C++ Boost Graph Library)
 * Each chain object includes adjacency list structure, molecular weight, moieties present, and is stored in vector of chains termed “chainPool”
+* Link tracker: the identity of the two chain units participating in the reaction as well as the position of the link. Analogous to the moiety trackers, this is tracked at the chain level and the overall level.
 
 # Using the model
 
